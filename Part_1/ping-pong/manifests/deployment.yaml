@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-ping-pong-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-ping-pong-dep
+  template:
+    metadata:
+      labels:
+        app: kube-ping-pong-dep
+    spec:
+      containers:
+        - name: kubernetes-ping-pong
+          image: nettivastaava/kubernetes-ping-pong:latest 
+

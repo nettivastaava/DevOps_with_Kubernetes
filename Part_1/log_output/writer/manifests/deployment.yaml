@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: random-strings-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: random-strings-depl
+  template:
+    metadata:
+      labels:
+        app: random-strings-depl
+    spec:
+      containers:
+        - name: kubernetes-log-output
+          image: nettivastaava/kubernetes-log-output:latest 
