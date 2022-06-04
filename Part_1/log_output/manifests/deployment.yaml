@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-output-rw-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-output-rw
+  template:
+    metadata:
+      labels:
+        app: log-output-rw
+    spec:
+      volumes: # Define volume
+        - name: shared-file
+          emptyDir: {}
+      containers:
+        - name: kubernetes-log-output-writer
+          image: nettivastaava/kubernetes-log-output-writer:express
+          volumeMounts: # Mount volume
+          - name: shared-file
+            mountPath: /app/files
+        - name: kubernetes-log-output-reader
+          image: nettivastaava/kubernetes-log-output-reader:express
+          volumeMounts: # Mount volume
+          - name: shared-file
+            mountPath: /app/files

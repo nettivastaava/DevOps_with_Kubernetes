@@ -1,10 +1,25 @@
-fs = require('fs')
+const express = require('express')
+const app = express()
+const path = require('path')
 
+const fs = require('fs')
+
+const PORT = process.env.PORT || 3001
+
+const directory = path.join('/', 'app', 'files')
+const filePath = path.join(directory, 'timestamps.txt')
 const date = new Date()
-fs.writeFile('/app/timestamps.txt', date.toString(), function (err) {
-  if (err) return console.log(err);
-  console.log('writing...')
+fs.writeFile(filePath, date.toString(), (err) => { 
+  if (err) { 
+    console.log(err); 
+  }  
 })
+console.log('writing')
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
+
 /*
 
 
