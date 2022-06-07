@@ -5,14 +5,14 @@ metadata:
 spec:
   rules:
   - http:
-      paths:
-      - path: /pingpong
+    - path: /pingpong
         pathType: Prefix
         backend:
           service:
             name: kube-ping-pong-svc
             port:
               number: 2345
+      paths:
       - path: /
         pathType: Prefix
         backend:
@@ -20,4 +20,4 @@ spec:
             name: log-output-rw-svc
             port: 
               number: 2345
-
+  

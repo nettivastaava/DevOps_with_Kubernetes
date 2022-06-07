@@ -12,7 +12,14 @@ spec:
       labels:
         app: kube-ping-pong-dep
     spec:
+      volumes:
+        - name: shared-pongs
+          persistentVolumeClaim:
+            claimName: pongs-claim
       containers:
         - name: kubernetes-ping-pong
-          image: nettivastaava/kubernetes-ping-pong:latest 
-
+          image: nettivastaava/kubernetes-ping-pong:fixdd 
+          volumeMounts:
+            - name: shared-pongs 
+              mountPath: /app/files
+              

@@ -12,17 +12,19 @@ spec:
       labels:
         app: log-output-rw
     spec:
-      volumes: # Define volume
-        - name: shared-file
-          emptyDir: {}
+      volumes:
+        - name: shared-pongs
+          persistentVolumeClaim:
+            claimName: pongs-claim
       containers:
         - name: kubernetes-log-output-writer
           image: nettivastaava/kubernetes-log-output-writer:express
           volumeMounts: # Mount volume
-          - name: shared-file
+          - name: shared-pongs
             mountPath: /app/files
         - name: kubernetes-log-output-reader
-          image: nettivastaava/kubernetes-log-output-reader:express
+          image: nettivastaava/kubernetes-log-output-reader:all-set
           volumeMounts: # Mount volume
-          - name: shared-file
+          - name: shared-pongs
             mountPath: /app/files
+

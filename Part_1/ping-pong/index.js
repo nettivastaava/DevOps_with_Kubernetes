@@ -1,14 +1,29 @@
 const express = require('express')
 const app = express()
+const path = require('path')
 
-let numberOfRequests = 0
+const fs = require('fs')
+
+const directory = path.join('/', 'app', 'files')
+const filePath = path.join(directory, 'pong_count.txt')
 
 app.get('/pingpong', (req, res) => {
-    numberOfRequests++
-  res.send(JSON.stringify(numberOfRequests))
+  const dataRead = fs.readFileSync(filePath, 'utf8')
+
+  const init = dataRead ? parseInt(dataRead) : 0
+  const numberOfRequests = (init + 1)
+
+  fs.writeFile(filePath, numberOfRequests.toString(), (err) => { 
+    if (err) {  
+      console.log(err); 
+    }  
+  })
+  console.log('pongs ', numberOfRequests)
+  const answerString = `pongs ${numberOfRequests.toString()}`
+  res.send(answerString)
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 3005
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
