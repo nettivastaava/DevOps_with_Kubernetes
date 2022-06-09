@@ -1,13 +1,11 @@
 const PORT = process.env.PORT || 3000
 
 const express = require('express')
-const http = require('http')
 const axios = require('axios')
 const fs = require('fs')
 const path = require('path')
 
 const app = express()
-const server = http.createServer(app)
 
 const directory = path.join('/', 'usr', 'src', 'app', 'files')
 const imagePath = path.join(directory, 'image.jpg')
@@ -57,10 +55,10 @@ app.get('/', async (_req, res) => {
     await findAFile()
   }
 
-  res.sendFile(path.resolve('front', 'index.html'))
+  res.sendFile(path.resolve('front-end', 'index.html'))
 });
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
   
