@@ -1,12 +1,13 @@
-FROM ubuntu:18.04
+FROM node:alpine
 
-EXPOSE 3002
+WORKDIR /usr/src/app
 
-WORKDIR /app
+COPY package* ./
+
+RUN npm install
 
 COPY . .
 
-RUN apt-get update && apt install -y curl && curl -sL https://deb.nodesource.com/setup_16.x | bash && apt install -y nodejs
-RUN npm install
+EXPOSE 3000
 
 CMD ["npm", "start"]

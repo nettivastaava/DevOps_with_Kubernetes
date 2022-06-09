@@ -12,6 +12,13 @@ spec:
       labels:
         app: todo-project-dep
     spec:
+      volumes:
+        - name: shared-files
+          persistentVolumeClaim:
+            claimName: file-claim
       containers:
         - name: kube-todo-project
-          image: nettivastaava/kube-todo-project:0.8 
+          image: nettivastaava/kube-todo-project:latest 
+          volumeMounts:
+          - name: shared-files
+            mountPath: usr/src/app/files
