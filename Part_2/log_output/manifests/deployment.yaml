@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-output-rw-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-output-rw
+  template:
+    metadata:
+      labels:
+        app: log-output-rw
+    spec:
+      volumes:
+        - name: shared-pongs
+          persistentVolumeClaim:
+            claimName: pongs-claim
+      containers:
+        - name: kubernetes-log-output-writer
+          image: nettivastaava/kubernetes-log-output-writer:p2
+          volumeMounts: # Mount volume
+          - name: shared-pongs
+            mountPath: usr/src/app/files
+        - name: kubernetes-log-output-reader
+          image: nettivastaava/kubernetes-log-output-reader:p2
+          volumeMounts: # Mount volume
+          - name: shared-pongs
+            mountPath: usr/src/app/files
+
