@@ -11,19 +11,32 @@ const path = require('path')
 const http = require('http');
 
 const app = express()
-const server = http.createServer(app);
+const server = http.createServer(app)
+
+const directory = path.join('/', 'usr', 'src', 'app', 'files')
+const filePath = path.join(directory, 'timestamps.txt')
 
 const random = (Math.random() + 1).toString(36).substring(7)
 
 app.get('/', async (_req, res) => {
   console.log('requesting...')
+  const data = fs.readFileSync(filePath, 'utf8')
   try {
     const pongs = await axios.get(serviceURL)
     console.log('got something ', pongs?.data)
-    res.sendStatus(pongs.data)
-    console.log('pongs ', pongs)
+    res.status(200).send(
+      `
+      <div>
+        <div>
+          ${data} ${random}
+        </div>
+        <div>
+          pongs ${pongs?.data}
+        </div>
+      </div>`
+    )
   } catch (error) {
-    res.send(error)
+    res.status(404).send(error)
   }
 })
 

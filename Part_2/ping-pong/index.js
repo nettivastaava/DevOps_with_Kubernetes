@@ -47,18 +47,3 @@ const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
-
-/*
-const PORT = process.env.PORT || 3001
-
-const http = require('http')
-let numberOfRequests = 0
-
-const app = http.createServer((request, response) => {
-  response.writeHead(200, { 'Content-Type': 'text/plain' })
-  response.end(JSON.stringify(numberOfRequests))
-})
-
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
-*/
