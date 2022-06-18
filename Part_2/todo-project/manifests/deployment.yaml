@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-project-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-project-dep
+  template:
+    metadata:
+      labels:
+        app: todo-project-dep
+    spec:
+      volumes:
+        - name: shared-files
+          persistentVolumeClaim:
+            claimName: file-claim
+      containers:
+        - name: kube-todo-project
+          image: nettivastaava/kube-todo-project:latest 
+          volumeMounts:
+          - name: shared-files
+            mountPath: usr/src/app/files
