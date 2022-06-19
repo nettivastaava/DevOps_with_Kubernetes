@@ -35,9 +35,13 @@ const App = () => {
 
     setTodoText('')
   }
+  console.log('image ', image)
 
   return (
     <div>
+      {image &&
+        <img src='http://localhost:8081/api/image' alt='image' width='600' height='600'/>
+      }
       <h2>TODOS</h2>
       <ol>
       {todos?.map(todo => (

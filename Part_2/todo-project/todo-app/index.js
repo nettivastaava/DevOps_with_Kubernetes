@@ -15,7 +15,6 @@ const timestampPath = path.join(directory, 'timestamps.txt')
 
 app.use(express.json())
 app.use(cors())
-app.use('/files', express.static(path.join(__dirname, 'files')))
 
 let todos = [
   {
