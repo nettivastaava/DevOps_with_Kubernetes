@@ -1,6 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: log-output
   name: log-output-rw-svc
 spec:
   type: ClusterIP
