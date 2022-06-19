@@ -18,7 +18,7 @@ spec:
             claimName: file-claim
       containers:
         - name: kube-todo-project
-          image: nettivastaava/kube-todo-project:latest 
+          image: nettivastaava/kube-todo-project:latest
           volumeMounts:
-          - name: shared-files
-            mountPath: usr/src/app/files
+            - name: shared-files
+              mountPath: usr/src/app/files 

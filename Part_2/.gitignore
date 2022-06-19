@@ -2,3 +2,4 @@
 ./ping_pong/node_modules
 ./log_output/reader/node_modules
 ./log_output/writer/node_modules
+requests
