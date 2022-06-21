@@ -17,6 +17,9 @@ spec:
         - name: shared-pongs
           persistentVolumeClaim:
             claimName: pongs-claim
+        - name: config
+          configMap:
+          name: hello-map
       containers:
         - name: kubernetes-log-output-writer
           image: nettivastaava/kubernetes-log-output-writer:p2
@@ -25,6 +28,12 @@ spec:
             mountPath: usr/src/app/files
         - name: kubernetes-log-output-reader
           image: nettivastaava/kubernetes-log-output-reader:p2
+          env:
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: hello-map
+                  key: message
           volumeMounts: # Mount volume
           - name: shared-pongs
             mountPath: usr/src/app/files

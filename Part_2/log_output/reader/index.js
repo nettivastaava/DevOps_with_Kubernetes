@@ -16,6 +16,8 @@ const server = http.createServer(app)
 const directory = path.join('/', 'usr', 'src', 'app', 'files')
 const filePath = path.join(directory, 'timestamps.txt')
 
+const helloMessage = process.env.MESSAGE
+
 const random = (Math.random() + 1).toString(36).substring(7)
 
 app.get('/', async (_req, res) => {
@@ -27,6 +29,9 @@ app.get('/', async (_req, res) => {
     res.status(200).send(
       `
       <div>
+        <div>
+        ${helloMessage}
+        </div>
         <div>
           ${data} ${random}
         </div>
