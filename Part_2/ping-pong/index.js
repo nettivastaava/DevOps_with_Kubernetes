@@ -1,45 +1,50 @@
+require('dotenv').config()
 const express = require('express')
+
 const app = express()
-const path = require('path')
+const { Sequelize, Model, DataTypes } = require('sequelize')
 
-const fs = require('fs')
-
-const directory = path.join('/', 'usr', 'src', 'app', 'files')
-const filePath = path.join(directory, 'pong_count.txt')
-
-const fileAlreadyExists = async () => new Promise(res => {
-  console.log('checking if file exists')
-  fs.stat(filePath, (err, stats) => {
-    if (err || !stats) return res(false)
-    return res(true)
-  })
+const sequelize = new Sequelize("pingpong-db", "postgres",
+    process.env.POSTGRES_PASSWORD, {
+    host: "postgres-svc",
+    dialect: "postgres"
 })
 
+class Pong extends Model {}
+  Pong.init({  
+    id: {    
+      type: DataTypes.INTEGER,    
+      primaryKey: true,    
+      autoIncrement: true  
+    },  
+    count: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+  }, {  
+    sequelize,   
+    timestamps: false,  
+    modelName: 'pong'
+  })
+
+Pong.sync()
+
 app.get('/pingpong', async (_req, res) => {
-  if (!await fileAlreadyExists()) {
-    console.log('does not exist')
-    await new Promise(res => fs.mkdir(directory, (err) => res()))
-    fs.writeFile(filePath, '1', (err) => { 
-      if (err) {  
-        console.log(err); 
-      }  
-    })
-    const pongs = 1
-    res.json(pongs)
+  const pong = await Pong.findByPk(1)
+  if (!pong) {
+    const newPong = await Pong.create({count: 0})
+    console.log('NEW PONG ', newPong)
+    res.json(newPong.count)
   } else {
-    console.log('it exist')
-    const dataRead = fs.readFileSync(filePath, 'utf8')
+    try {
+      console.log('EXISTING PONG ', pong)
+      pong.count = pong.count + 1
 
-    const init = dataRead ? parseInt(dataRead) : 0
-    const numberOfRequests = (init + 1)
-
-    fs.writeFile(filePath, numberOfRequests.toString(), (err) => { 
-      if (err) {  
-        console.log(err); 
-      }  
-    })
-    console.log('pongs ', numberOfRequests)
-    res.json(numberOfRequests)
+      await pong.save()
+      res.json(pong.count)
+    } catch(exception) {
+      res.send(exception)
+    }
   }
 })
 

@@ -1,5 +1,8 @@
 ./todo-project/todo-app/node_modules
 ./ping_pong/node_modules
+./ping-pong/manifests/secret.yaml
 ./log_output/reader/node_modules
 ./log_output/writer/node_modules
 requests
+key.txt
+

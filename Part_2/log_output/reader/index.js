@@ -25,12 +25,13 @@ app.get('/', async (_req, res) => {
   const data = fs.readFileSync(filePath, 'utf8')
   try {
     const pongs = await axios.get(serviceURL)
+    console.log('raw data ', pongs)
     console.log('got something ', pongs?.data)
     res.status(200).send(
       `
       <div>
         <div>
-        ${helloMessage}
+          ${helloMessage}
         </div>
         <div>
           ${data} ${random}

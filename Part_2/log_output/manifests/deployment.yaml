@@ -27,7 +27,7 @@ spec:
           - name: shared-pongs
             mountPath: usr/src/app/files
         - name: kubernetes-log-output-reader
-          image: nettivastaava/kubernetes-log-output-reader:p2
+          image: nettivastaava/kubernetes-log-output-reader:2.07.1
           env:
             - name: MESSAGE
               valueFrom:

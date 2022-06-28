@@ -13,13 +13,13 @@ spec:
       labels:
         app: kube-ping-pong-dep
     spec:
-      volumes:
-        - name: pongs
-          emptyDir: {}
       containers:
         - name: kubernetes-ping-pong
-          image: nettivastaava/kubernetes-ping-pong:p2
-          volumeMounts:
-            - name: pongs 
-              mountPath: usr/src/app/files
+          image: nettivastaava/kubernetes-ping-pong:2.07.9
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-apkey
+                  key: POSTGRES_PASSWORD
               
