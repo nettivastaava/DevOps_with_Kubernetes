@@ -31,9 +31,10 @@ const App = () => {
       .createTodo(todoObject)
         .then(response => {
           setTodos(todos.concat(response.data))
+          setTodoText('')
         })
 
-    setTodoText('')
+    
   }
   console.log('image ', image)
 

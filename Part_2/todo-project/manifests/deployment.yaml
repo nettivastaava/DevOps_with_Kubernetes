@@ -19,7 +19,13 @@ spec:
             claimName: file-claim
       containers:
         - name: kube-todo-project
-          image: nettivastaava/kube-todo-project:latest
+          image: nettivastaava/kube-todo-project:2.08.8
           volumeMounts:
             - name: shared-files
               mountPath: usr/src/app/files 
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-apkey
+                  key: POSTGRES_PASSWORD

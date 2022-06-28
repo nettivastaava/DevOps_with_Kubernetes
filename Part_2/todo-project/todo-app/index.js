@@ -1,14 +1,16 @@
-const PORT = process.env.PORT || 3001
+require('dotenv').config()
+const http = require('http')
 
 const express = require('express')
 const axios = require('axios')
 const cors = require('cors')
+const { Sequelize, Model, DataTypes } = require('sequelize')
 
 const fs = require('fs')
 const path = require('path')
 
 const app = express()
-
+const server = http.createServer(app)
 const directory = path.join('/', 'usr', 'src', 'app', 'files')
 const imagePath = path.join(directory, 'image.jpg')
 const timestampPath = path.join(directory, 'timestamps.txt')
@@ -16,16 +18,30 @@ const timestampPath = path.join(directory, 'timestamps.txt')
 app.use(express.json())
 app.use(cors())
 
-let todos = [
-  {
-    id: 1,
-    text: 'Tiskaa'
-  },
-  {
-    id: 2,
-    text: 'Tee ruokaa'
-  },
-]
+const sequelize = new Sequelize("todo-db", "postgres",
+    process.env.POSTGRES_PASSWORD, {
+    host: "postgres-svc",
+    dialect: "postgres"
+})
+
+class Todo extends Model {}
+  Todo.init({  
+    id: {    
+      type: DataTypes.INTEGER,    
+      primaryKey: true,    
+      autoIncrement: true  
+    },  
+    text: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+  }, {  
+    sequelize,   
+    timestamps: false,  
+    modelName: 'todo'
+  })
+
+Todo.sync()
 
 const shouldFetchAnother = () => {
   if (!fs.existsSync(timestampPath)) {
@@ -59,15 +75,16 @@ const findAFile = async () => {
 
 const removeFile = async () => new Promise(res => fs.unlink(timestampPath, (err) => res()))
 
-app.post('/api/todos', (request, response) => {  
-  const todo = request.body  
-  console.log(todo)  
-  todos = todos.concat(todo)
-  response.json(todo)
+app.post('/api/todos', async (req, res) => {  
+  console.log('posting')
+  const newTodo = await Todo.create({text: req.body.text})
+  console.log('new todo ', newTodo)  
+  res.json(newTodo)
 })
 
-app.get('/api/todos', (request, response) => {
-  console.log('requesting...')
+app.get('/api/todos', async (request, response) => {
+  const todos = await Todo.findAll({})
+  console.log('all todos ', todos)
   response.json(todos)
 })
 
@@ -85,7 +102,9 @@ app.get('/api/image', async (_req, res) => {
   res.sendFile(imagePath)
 })
 
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 3001
+
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
   
