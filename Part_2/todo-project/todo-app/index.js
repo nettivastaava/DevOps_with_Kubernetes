@@ -2,6 +2,8 @@ require('dotenv').config()
 const http = require('http')
 
 const express = require('express')
+const morgan = require('morgan')
+const bodyParser = require('body-parser')
 const axios = require('axios')
 const cors = require('cors')
 const { Sequelize, Model, DataTypes } = require('sequelize')
@@ -15,8 +17,13 @@ const directory = path.join('/', 'usr', 'src', 'app', 'files')
 const imagePath = path.join(directory, 'image.jpg')
 const timestampPath = path.join(directory, 'timestamps.txt')
 
+app.use(bodyParser.json())
 app.use(express.json())
 app.use(cors())
+
+morgan.token('body', function (req) {return JSON.stringify(req.body)})
+
+app.use(morgan(' :method :url :status :res[content-length] - :response-time ms :body'))
 
 const sequelize = new Sequelize("todo-db", "postgres",
     process.env.POSTGRES_PASSWORD, {
@@ -76,6 +83,11 @@ const findAFile = async () => {
 const removeFile = async () => new Promise(res => fs.unlink(timestampPath, (err) => res()))
 
 app.post('/api/todos', async (req, res) => {  
+  if (req.body.text.length > 140) {
+    return res.status(400).json({
+      error: 'TODO length cannot exceed 140 characters'
+    })
+  }
   console.log('posting')
   const newTodo = await Todo.create({text: req.body.text})
   console.log('new todo ', newTodo)  
