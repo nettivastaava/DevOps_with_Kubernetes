@@ -21,4 +21,8 @@ spec:
                 secretKeyRef:
                   name: pg-apkey
                   key: POSTGRES_PASSWORD
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "150Mi"
               

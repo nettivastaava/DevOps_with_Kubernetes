@@ -25,6 +25,10 @@ spec:
           volumeMounts: # Mount volume
           - name: shared-pongs
             mountPath: usr/src/app/files
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "150Mi"
         - name: kubernetes-log-output-reader
           image: nettivastaava/kubernetes-log-output-reader:2.07.1
           env:
@@ -36,4 +40,8 @@ spec:
           volumeMounts: # Mount volume
           - name: shared-pongs
             mountPath: usr/src/app/files
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "150Mi"
 
