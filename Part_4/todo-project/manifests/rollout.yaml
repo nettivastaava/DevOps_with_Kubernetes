@@ -1,13 +1,23 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
-  namespace: todo
   name: todo-project-dep
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: todo-project-dep
+  strategy:
+    canary:
+      steps:
+      - setWeight: 25
+      - analysis:
+        templates:
+        - templateName: cpu-usage
+      - setWeight: 50
+      - analysis:
+        templates:
+        - templateName: cpu-usage
   template:
     metadata:
       labels:
@@ -31,6 +41,12 @@ spec:
                   key: POSTGRES_PASSWORD
           readinessProbe:
             initialDelaySeconds: 10
+            periodSeconds: 5 
+            httpGet:
+               path: /healthz
+               port: 3001
+          livenessProbe:
+            initialDelaySeconds: 20 
             periodSeconds: 5 
             httpGet:
                path: /healthz
