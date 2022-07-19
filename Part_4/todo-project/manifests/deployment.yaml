@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: todo
+  name: todo-project-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-project-dep
+  template:
+    metadata:
+      labels:
+        app: todo-project-dep
+    spec:
+      volumes:
+        - name: shared-files
+          persistentVolumeClaim:
+            claimName: file-claim
+      containers:
+        - name: kube-todo-project
+          image: nettivastaava/kube-todo-project:4.2.2
+          volumeMounts:
+            - name: shared-files
+              mountPath: usr/src/app/files 
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-apkey
+                  key: POSTGRES_PASSWORD
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5 
+            httpGet:
+               path: /healthz
+               port: 3001
