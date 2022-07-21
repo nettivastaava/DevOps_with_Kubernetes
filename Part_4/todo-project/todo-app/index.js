@@ -41,6 +41,10 @@ class Todo extends Model {}
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    done: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   }, {  
     sequelize,   
     timestamps: false,  
@@ -87,7 +91,7 @@ app.post('/api/todos', async (req, res) => {
       error: 'TODO length cannot exceed 140 characters'
     })
   }
-  console.log('posting')
+  console.log('posting a todo')
   const newTodo = await Todo.create({text: req.body.text})
   console.log('new todo ', newTodo)  
   res.json(newTodo)
@@ -97,6 +101,19 @@ app.get('/api/todos', async (request, response) => {
   const todos = await Todo.findAll({})
   console.log('all todos ', todos)
   response.json(todos)
+})
+
+app.put('/api/todos/:id', async (request, response) => {
+  const todo = await Todo.findByPk(request.params.id)
+  
+  try {
+    todo.done = !todo.done
+    console.log('updated ', todo)
+    await todo.save()
+    response.json(todo)
+  } catch(error) {
+    console.log(error)
+  }
 })
 
 

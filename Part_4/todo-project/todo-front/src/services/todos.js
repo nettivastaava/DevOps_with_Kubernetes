@@ -9,7 +9,12 @@ const createTodo = newObject => {
   return axios.post(baseUrl, newObject)
 }
 
+const updateTodo = async updatedTodo => {
+  await axios.put(`${baseUrl}/${updatedTodo.id}`, updatedTodo)
+}
+
 export default {
   getAllTodos: getAllTodos,
-  createTodo: createTodo
+  createTodo: createTodo,
+  updateTodo: updateTodo,
 }

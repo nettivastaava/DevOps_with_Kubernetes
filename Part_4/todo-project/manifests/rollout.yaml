@@ -29,7 +29,7 @@ spec:
             claimName: file-claim
       containers:
         - name: kube-todo-project
-          image: nettivastaava/kube-todo-project:4.2.2
+          image: nettivastaava/kube-todo-project:4.05.3
           volumeMounts:
             - name: shared-files
               mountPath: usr/src/app/files 

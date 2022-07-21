@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import todoService from './services/todos'
 import imageService from './services/images'
+import Todo from './components/Todo'
 
 const App = () => {
   const [todos, setTodos] = useState([])
@@ -36,7 +37,9 @@ const App = () => {
 
     
   }
-  console.log('image ', image)
+
+  console.log('todos ', todos)
+  
 
   return (
     <div>
@@ -46,9 +49,7 @@ const App = () => {
       <h2>TODOS</h2>
       <ol>
       {todos?.map(todo => (
-        <li>
-          {todo.text}
-        </li>
+        <Todo todo={todo} todos={todos} setTodos={setTodos} />
       ))}
       </ol>
       <form onSubmit={handleSubmit}>
